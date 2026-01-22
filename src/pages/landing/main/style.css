@@ -1,0 +1,27 @@
+@layer main {
+  .gradient {
+    background: linear-gradient(
+        180deg,
+        #000000 0%,
+        rgba(0, 0, 0, 0) 51.44%,
+        #000000 100%
+      ),
+      url(/src/assets/images/dark-bg.jpg);
+  }
+  .modal {
+    border: 1px solid;
+    border-image-source: linear-gradient(
+      92.4deg,
+      rgba(69, 199, 242, 0.16) 0.37%,
+      rgba(79, 227, 193, 0.16) 57.61%,
+      rgba(69, 150, 242, 0.16) 113.75%
+    );
+    box-shadow: 0px 0px 17px 0px #45c7f259;
+    gap: 32px;
+    opacity: 1;
+    border-radius: 4px;
+    padding: 44px;
+    border-width: 1px;
+    background-color: black;
+  }
+}

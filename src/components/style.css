@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@layer components {
+  .myBtn {
+    background: linear-gradient(
+      92.4deg,
+      #45c7f2 0.37%,
+      #4fe3c1 57.61%,
+      #4596f2 113.75%
+    );
+    box-shadow: 0px 0px 17px 0px #45c7f259;
+
+    padding: 3px 10px;
+  }
+
+  .myGrey {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .detailCard {
+    border: 1px solid;
+
+    border-image-source: linear-gradient(
+      92.4deg,
+      rgba(69, 199, 242, 0.16) 0.37%,
+      rgba(79, 227, 193, 0.16) 57.61%,
+      rgba(69, 150, 242, 0.16) 113.75%
+    );
+    box-shadow: 0px 0px 17px 0px #45c7f259;
+    gap: 32px;
+    opacity: 1;
+    border-radius: 4px;
+    padding: 24px;
+    border-width: 1px;
+  }
+  .title {
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .subTitle {
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #ffffff99;
+  }
+  .value {
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #45f265;
+    padding-left: 3px;
+  }
+  .content {
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  .icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+}
