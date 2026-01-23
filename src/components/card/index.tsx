@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-import Button from "../Button";
-import DetailModal from "../detailModal/DetailModal";
-
+import DetailModal from "../detailmodal/DetailModal";
 import ethereumIcon from "../../assets/images/icons/ethereum.png";
 import usdtIcon from "../../assets/images/icons/usdt.png";
 import giftIcon from "../../assets/images/icons/gift.png";
-
+import DepositModal from "../modal/DepositModal";
 import "../style.css";
+
 
 interface props {
   index: number;
@@ -15,6 +14,15 @@ interface props {
 
 const Card = ({ index }: props) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [modalOpen, setOpenModals] = useState(false);
+
+  const openModal = () => {
+    setOpenModals(true);
+  };
+
+  const closeModal = () => {
+    setOpenModals(false);
+  };
 
   return (
     <div
@@ -90,11 +98,16 @@ const Card = ({ index }: props) => {
         <span className="text-[#FFFFFF] font-semibold text-[32px]">
           <span className="text-[#FFFFFF4D] text-[24px]">$</span>60m
         </span>
-        {/* <button className="px-4 py-2 rounded bg-[#45c7f2] text-white font-medium text-sm hover:bg-[#3bb0d9] transition-colors">
-          Deposit
-        </button> */}
-        <Button content={"Deposit"} />
+            <button
+              onClick={() => openModal()}
+              className="size-sm h-[35px] rounded-[4px] py-[8px] px-[12px] gap-[8px] hover:bg-[#3bb0d9] transition-colors myBtn flex items-center justify-center
+                      cursor-pointer bg-black [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 
+                      hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)]"
+                      >Deposit
+            </button>
       </div>
+
+      <DepositModal isOpen={modalOpen} onClose={closeModal} children={undefined} />
     </div>
   );
 };

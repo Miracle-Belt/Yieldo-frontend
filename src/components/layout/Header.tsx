@@ -1,5 +1,6 @@
 import Button from "../Button";
 import logo from "../../assets/images/header-logo.png";
+import ConnectWallet from "../ConnectWallet";
 
 const Header = () => {
   return (
@@ -27,6 +28,7 @@ const Header = () => {
                   <button className="px-5 py-2.5 rounded border border-[rgba(69,199,242,0.2)] text-sm font-medium text-white cursor-pointer bg-black [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)]">
                     For Vaults
                   </button>
+                  <ConnectWallet/>
                 </div>
             </nav>
           </div>
