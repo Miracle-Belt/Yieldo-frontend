@@ -1,20 +1,20 @@
 import Button from "../Button";
 const Adopter = () => {
-    return(
-        <div className="relative w-[1920px] h-[560px] gap-[10px] bg-black top-[100px] grid grid-cols-1 justify-items-center">
-           <div className="w-[819px] h-[141px] gap-[16px] justify-items-center text-center grid grid-cols-1 ">
-                <div className="w-[63px] h-[25px] pt-[4px] pb-[4px] pr-[12px] pl-[12px] gap-[12px] grid grid-cols-1 ">
-                    <div className="w-[39px] h-[17px] text-[14px] text-center">Lorem</div>
+    return (
+        <div className="relative w-full py-24 bg-black flex flex-col items-center justify-center text-center px-6">
+           <div className="max-w-4xl flex flex-col items-center gap-8">
+                <div className="text-sm uppercase tracking-widest opacity-60">LOREM IPSUM</div>
+                <div className="text-3xl md:text-5xl lg:text-6xl font-bold uppercase leading-tight">
+                    EARN POINTS AS AN EARLY ADOPTER
                 </div>
-                <div className="w-[819px] h-[58px] text-[48px]">
-                  EARN POINTS AS AN EARLY ADOPTER
+                <div className="text-lg md:text-[22px] opacity-80 max-w-2xl">
+                    Earn points for bringing AUM or distributing yield strategies.
                 </div>
-                <div className="w-[668px] h-[26px] text-[22px]">Earn points for bringing AUM or distributing yield strategies.</div>
-                <div className="items-center gap-[8px] justify-center w-[161px] h-[43px]">
-                            <Button content={"Join Early Access"} />
+                <div className="mt-4">
+                    <Button content={"Join Early Access"} />
                 </div>
             </div>
-    </div>
+        </div>
     )
 }
 export default Adopter

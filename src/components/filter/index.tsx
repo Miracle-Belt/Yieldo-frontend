@@ -502,15 +502,15 @@ const Filter = () => {
 
           {/* Filter Panel - Expandable */}
           {isExpanded && (
-        <div className="px-6 pb-6 pt-4 border-t border-gray-800">
-          <div className="flex flex-wrap items-end gap-4">
+        <div className="px-4 md:px-6 pb-6 pt-4 border-t border-gray-800">
+          <div className="flex flex-col lg:flex-row flex-wrap items-start lg:items-end gap-4 md:gap-6">
             {/* Type */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full lg:w-auto">
               <label className="text-white text-sm font-medium">Type</label>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedType("Prime")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded border transition-all ${
+                  className={`flex flex-1 lg:flex-none items-center justify-center gap-2 px-3 py-2 rounded border transition-all ${
                     selectedType === "Prime"
                       ? "border-[#45c7f2] bg-[#45c7f2]/10"
                       : "border-gray-700 bg-transparent hover:border-gray-600"
@@ -543,7 +543,7 @@ const Filter = () => {
                 </button>
                 <button
                   onClick={() => setSelectedType("New")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded border transition-all ${
+                  className={`flex flex-1 lg:flex-none items-center justify-center gap-2 px-3 py-2 rounded border transition-all ${
                     selectedType === "New"
                       ? "border-[#45c7f2] bg-[#45c7f2]/10"
                       : "border-gray-700 bg-transparent hover:border-gray-600"
@@ -594,7 +594,7 @@ const Filter = () => {
                 </button>
                 <button
                   onClick={() => setSelectedType("Favorites")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded border transition-all ${
+                  className={`flex flex-1 lg:flex-none items-center justify-center gap-2 px-3 py-2 rounded border transition-all ${
                     selectedType === "Favorites"
                       ? "border-[#45c7f2] bg-[#45c7f2]/10"
                       : "border-gray-700 bg-transparent hover:border-gray-600"
@@ -619,67 +619,73 @@ const Filter = () => {
             </div>
 
             {/* Categories */}
-            <MultiSelect
-              options={categoryOptions}
-              selected={selectedCategories}
-              onChange={setSelectedCategories}
-              placeholder="Select categories"
-              label="Categories"
-            />
+            <div className="w-full sm:w-auto flex-1 min-w-[200px]">
+              <MultiSelect
+                options={categoryOptions}
+                selected={selectedCategories}
+                onChange={setSelectedCategories}
+                placeholder="Select categories"
+                label="Categories"
+              />
+            </div>
 
             {/* Minimum APY */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
               <label className="text-white text-sm font-medium">Minimum APY</label>
               <input
                 type="text"
                 value={minimumAPY}
                 onChange={(e) => setMinimumAPY(e.target.value)}
-                className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] max-w-[100px]"
+                className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] w-full sm:max-w-[100px]"
               />
             </div>
 
             {/* Minimum Risk */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-auto">
               <label className="text-white text-sm font-medium">Minimum Risk</label>
               <input
                 type="text"
                 value={minimumRisk}
                 onChange={(e) => setMinimumRisk(e.target.value)}
-                className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] max-w-[100px]"
+                className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] w-full sm:max-w-[100px]"
               />
             </div>
 
             {/* Blockchain */}
-            <MultiSelect
-              options={blockchainOptions}
-              selected={selectedBlockchains}
-              onChange={setSelectedBlockchains}
-              placeholder="Select blockchains"
-              label="Blockchain"
-              showIcons={true}
-            />
+            <div className="w-full sm:w-auto flex-1 min-w-[200px]">
+              <MultiSelect
+                options={blockchainOptions}
+                selected={selectedBlockchains}
+                onChange={setSelectedBlockchains}
+                placeholder="Select blockchains"
+                label="Blockchain"
+                showIcons={true}
+              />
+            </div>
 
             {/* Assets */}
-            <MultiSelect
-              options={assetOptions}
-              selected={selectedAssets}
-              onChange={setSelectedAssets}
-              placeholder="Select Assets"
-              label="Assets"
-              showIcons={true}
-            />
+            <div className="w-full sm:w-auto flex-1 min-w-[200px]">
+              <MultiSelect
+                options={assetOptions}
+                selected={selectedAssets}
+                onChange={setSelectedAssets}
+                placeholder="Select Assets"
+                label="Assets"
+                showIcons={true}
+              />
+            </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 ml-auto">
+            <div className="flex gap-4 w-full lg:w-auto lg:ml-auto pt-4 lg:pt-0">
               <button
                 onClick={handleRemove}
-                className="px-6 py-2 text-red-500 hover:text-red-400 transition-colors whitespace-nowrap"
+                className="flex-1 lg:flex-none px-6 py-2 text-red-500 hover:text-red-400 transition-colors whitespace-nowrap"
               >
                 Remove
               </button>
               <button
                 onClick={handleApply}
-                className="px-6 py-2 rounded text-white font-medium whitespace-nowrap"
+                className="flex-1 lg:flex-none px-6 py-2 rounded text-white font-medium whitespace-nowrap"
                 style={{
                   background: "linear-gradient(92.4deg, #45c7f2 0%, #4596f2 100%)",
                   boxShadow: "0px 0px 17px 0px rgba(69, 199, 242, 0.4)",

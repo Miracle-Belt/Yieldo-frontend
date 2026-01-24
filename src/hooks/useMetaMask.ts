@@ -9,7 +9,10 @@ export const useMetaMask = () => {
   const connectWallet = async () => {
     if (!window.ethereum) {
       window.open(
-        "https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank", "noopener,noreferrer");
+        "https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
+        "_blank",
+        "noopener,noreferrer",
+      );
       return;
     }
 
@@ -21,6 +24,8 @@ export const useMetaMask = () => {
       setAccount(accounts[0]);
       setChainId(network.chainId.toString());
       setProvider(browserProvider);
+      localStorage.setItem("account", accounts);
+      localStorage.setItem("chainId", network.chainId.toString());
     } catch (err) {
       console.error("Wallet connection failed", err);
     }

@@ -14,6 +14,12 @@ import "./style.css";
 
 const Main = () => {
   const [openModals, setOpenModals] = useState<boolean[]>([false, false]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    username: "@CRYPTOSENSEI",
+    title: "Crypto Sensei Research",
+    description: "DeFi expert & yield strategist",
+  });
 
   const openModal = (index: number) => {
     const newOpenModals = [...openModals];
@@ -42,17 +48,17 @@ const Main = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full max-w-[1400px] flex flex-col lg:flex-row gap-8 lg:gap-8 relative">
-        <div className="w-full relative lg:w-[260px] h-[400px]  flex-shrink-0 ">
+      <div className="w-full max-w-[1400px] flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+        <div className="w-full relative lg:w-[260px] h-[300px] md:h-[400px] flex-shrink-0 flex justify-center lg:justify-start">
           <div
-            className="w-[80%] h-full rounded-xl  overflow-hidden"
+            className="w-full max-w-[300px] lg:w-[80%] h-full rounded-xl overflow-hidden"
             style={{
               backgroundImage: `url(${rectangle})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           >
-            <div className="absolute top-3 right-0 w-[110px] h-[110px]">
+            <div className="absolute top-3 right-[10%] lg:right-0 w-[80px] h-[80px] md:w-[110px] md:h-[110px]">
               <img
                 src={ellipse}
                 alt="Profile"
@@ -62,8 +68,8 @@ const Main = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col justify-between ">
-          <div className=" top-3 left-3 flex gap-2 z-10">
+        <div className="flex-1 flex flex-col justify-between">
+          <div className="flex gap-2 z-10">
             <span className="px-2 py-1 rounded text-xs font-medium bg-[#4596f21a] border border-[#4596f2] text-[#4596f2] w-fit">
               PRO
             </span>
@@ -71,28 +77,28 @@ const Main = () => {
               Lorem ipsum tag
             </span>
           </div>
-          <div className="flex flex-col gap-6 mt-2">
+          <div className="flex flex-col gap-6 mt-6 lg:mt-2">
             <div className="flex flex-col">
               <h1 className="leading-tight">
-                <span className="text-white text-4xl md:text-5xl lg:text-[64px] xl:text-7.2xl">
-                  @CRYPTOSENSEI`
+                <span className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-[64px] xl:text-7.2xl uppercase break-words">
+                  {editForm.username}`
                 </span>
-                <span className="text-gray-400 text-2xl md:text-3xl lg:text-4xl xl:text-[34px] font-normal">
+                <span className="text-gray-400 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[34px] font-normal block lg:inline">
                   S TOP YEILD PICKS
                 </span>
               </h1>
             </div>
 
             <div className="flex flex-col gap-1">
-              <p className="text-white text-xl md:text-[34px] font-normal">
-                Crypto Sensei Research
+              <p className="text-white text-lg sm:text-xl md:text-[34px] font-normal">
+                {editForm.title}
               </p>
-              <p className="text-white md:text-[22px] mt-4">
-                DeFi expert & yield strategist
+              <p className="text-white text-sm sm:text-base md:text-[22px] mt-2 md:mt-4">
+                {editForm.description}
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-4 lg:mt-2">
               <button
                 onClick={() => openModal(0)}
                 className="w-[40px] h-[40px] px-2 py-2 rounded border border-[rgba(69,199,242,0.2)] text-sm font-medium text-white cursor-pointer bg-black/80 [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)] flex items-center gap-2"
@@ -120,21 +126,24 @@ const Main = () => {
             </div>
           </div>
 
-          <div className="absolute top-0 right-0">
-            <button className="px-4 py-2 rounded border border-[rgba(69,199,242,0.2)] text-sm font-medium text-white cursor-pointer bg-black/80 [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)] flex items-center gap-2">
+          <div className="absolute top-0 right-0 lg:static lg:mt-4 xl:absolute xl:top-0 xl:right-0">
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="px-3 py-1.5 md:px-4 md:py-2 rounded border border-[rgba(69,199,242,0.2)] text-xs md:text-sm font-medium text-white cursor-pointer bg-black/80 [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)] flex items-center gap-2"
+            >
               <span
-                className="w-[24px] h-[24px]"
+                className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]"
                 style={{
                   backgroundImage: `url(${editIcon})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               ></span>
-              <span className="text-[16px] font-medium">Edit</span>
+              <span className="text-sm md:text-[16px] font-medium">Edit</span>
             </button>
           </div>
 
-          <div className="mt-auto pt-8">
+          <div className="mt-8 lg:mt-auto pt-4 md:pt-8">
             <p className="text-gray-400 text-xs md:text-[12px]">
               Curated with Yieldo's intelligence | Powered by Yieldo
             </p>
@@ -212,6 +221,62 @@ const Main = () => {
           </div>
         );
       })}
+
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <div className="modal xl:w-[600px] lg:w-[500px] md:w-[400px] sm:w-[320px] relative p-8">
+          <span
+            className="w-[24px] h-[24px] block absolute top-4 right-4 cursor-pointer"
+            style={{
+              backgroundImage: `url(${closeIcon})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            onClick={() => setIsEditModalOpen(false)}
+          />
+          <h2 className="text-2xl font-bold mb-6 text-white">Edit Profile</h2>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-400 text-sm">Username</label>
+              <input
+                type="text"
+                value={editForm.username}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, username: e.target.value })
+                }
+                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-[#45c7f2]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-400 text-sm">Title</label>
+              <input
+                type="text"
+                value={editForm.title}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, title: e.target.value })
+                }
+                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-[#45c7f2]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-400 text-sm">Description</label>
+              <textarea
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, description: e.target.value })
+                }
+                rows={3}
+                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg p-3 text-white focus:outline-none focus:border-[#45c7f2]"
+              />
+            </div>
+            <button
+              onClick={() => setIsEditModalOpen(false)}
+              className="mt-4 w-full h-[48px] rounded-lg bg-[#45c7f2] text-black font-bold hover:bg-[#3bb0d9] transition-colors"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

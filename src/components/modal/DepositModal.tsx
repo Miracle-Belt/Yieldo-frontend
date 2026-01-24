@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ethereumIcon from "../../assets/images/icons/ethereum.png";
+import ABI from "../../assets/YieldoDepositRouter.json"
+import { getWeb3 } from "../../utils/web3"
+import { domain, types } from "../../utils/eip712"
+// import { DepositIntent } from "../../types/DepositIntent"
+import { useWallet } from "../../hooks/useWallet"
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -10,8 +15,13 @@ interface DepositModalProps {
 
 const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
   const [ethereum, setEthereum] = useState<string>("0");
-  const [price, setPrice] = useState<string>("$0");
-  const [valid, setValid] = useState<string>("Enter a valid amount");
+  const [btnContent, setBtnContent] = useState<string>("Enter a valid amount");
+  const [amount, setAmount] = useState<string>("")
+  const {account, connect } = useWallet()
+
+  useEffect(() => {
+    connect()
+  }, []);
 
   if (!isOpen) return null;
 
@@ -27,12 +37,56 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
       style: "currency",
       currency: "USD",
     });
-    setPrice(num);
-    if (value == "" || value == "0") setValid("Enter a valid amount");
-    else setValid("Insufficient token balance");
+    setAmount(num);
+    if (value == "" || value == "0") setBtnContent("Enter a valid amount");
+    else setBtnContent("Insufficient token balance");
   };
 
-  const sendETH = () => {};
+  const sendETH = async () => {
+    if (!window.ethereum) {
+      alert("MetaMask not installed")
+      return
+    }
+
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0xaa36a7" }], // Sepolia
+    })
+
+    const web3 = getWeb3()
+    await window.ethereum.request({ method: "eth_requestAccounts" })
+
+    // const intent: DepositIntent = {
+    const intent = {
+      user: account,
+      vault: "0xa782d9e5e5eb3f4e913223a317f61ecc4bddff43",
+      kol: "0xa782d9e5e5eb3f4e913223a317f61ecc4bddff43",
+      grossAssets: 0.001,
+      deadline: Math.floor(Date.now() / 1000) + 3600,
+      nonce: Date.now(),
+    }
+
+    // 1️⃣ SIGN WITH METAMASK
+    const signature = await window.ethereum.request({
+      method: "eth_signTypedData_v4",
+      params: [
+        account,
+        JSON.stringify({
+          domain,
+          types,
+          primaryType: "DepositIntent",
+          message: intent,
+        }),
+      ],
+    })
+
+    // 2️⃣ CALL CONTRACT
+    const contract = new web3.eth.Contract(ABI as any, "0xbab898bD8D4799E62a521dbca8B2aCCc00957086")
+
+    await contract.methods
+      .depositWithIntent(intent, signature)
+      .send({ from: account })
+  }
 
   return (
     <div
@@ -71,7 +125,7 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
 
         <div className="flex justify-between w-full my-2">
           <div className="text-[15px] px-2 py-2 rounded text-blue-400 focus:outline-none focus:border-[#45c7f2] max-w-[150px]">
-            {price}
+            {amount}
           </div>
           <button
             className={`flex items-center gap-2 px-2 py-2 rounded transition-all `}
@@ -89,7 +143,7 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
                     cursor-pointer bg-black [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 
                     hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)] w-full"
         >
-          <span className="text-black text-[16px] font-medium">{valid}</span>
+          <span className="text-black text-[16px] font-medium">{btnContent}</span>
         </button>
       </div>
       {children}
