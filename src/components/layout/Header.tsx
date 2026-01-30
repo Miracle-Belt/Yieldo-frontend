@@ -8,7 +8,11 @@ const Header = () => {
       <div className="w-full max-w-[1400px]">
         <nav className="w-full py-4 md:py-8 flex flex-col md:flex-row justify-between items-center gap-6 bg-black">
           <div className="flex items-center">
-            <img alt="Logo" src={logo} className="w-[100px] md:w-[116px] h-auto" />
+            <img
+              alt="Logo"
+              src={logo}
+              className="w-[100px] md:w-[116px] h-auto"
+            />
           </div>
           <div className="flex items-center gap-4 md:gap-8">
             <a
@@ -18,8 +22,8 @@ const Header = () => {
               Dashboard
             </a>
             <a
-              href="/configurator"
-              className="text-sm md:text-base font-bold text-[#4596f2cc] no-underline [text-shadow:0_0_8px_rgba(69,150,242,0.6),0_0_16px_rgba(69,150,242,0.4)]"
+              href="/landing"
+              className="text-sm md:text-base text-white no-underline [text-shadow:0_0_8px_rgba(69,150,242,0.6),0_0_16px_rgba(69,150,242,0.4)]"
             >
               Landing page editor
             </a>

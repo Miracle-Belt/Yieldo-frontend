@@ -1,11 +1,20 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import ethereumIcon from "../../assets/images/icons/ethereum.png";
-import ABI from "../../assets/YieldoDepositRouter.json"
-import { getWeb3 } from "../../utils/web3"
-import { domain, types } from "../../utils/eip712"
-// import { DepositIntent } from "../../types/DepositIntent"
-import { useWallet } from "../../hooks/useWallet"
+import depositRouter from "../../assets/YieldoDepositRouter.json";
+import mockUSDC from "../../assets/MockUSDC.json";
+import { types } from "../../utils/eip712";
+import { ethers } from "ethers";
+import { useMetaMask } from "../../hooks/useMetaMask";
+
+// This would be loaded from deployment file or env
+const DEPLOYMENT = {
+  DepositRouter: "0x6aEF06B6F8bAE2e2877D1f6f2417B7Ac93f5C20f".toLowerCase(),
+  MockLagoonVault: "0xE711750dF0dfb5aDB0142bD64EE0Ef2eF1453b88".toLowerCase(),
+  MockUSDC: "0x2e96B06907378F9A503f7Eeb6CbF6d06cA6Bf1C8".toLowerCase(),
+};
+// KOL address (for demo, using a placeholder - in production this would be from URL params)
+const kolAddress = "0x4A8f63BACa4F255c30DcBb6565d017EDA2481D1c".toLowerCase();
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -14,13 +23,13 @@ interface DepositModalProps {
 }
 
 const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
-  const [ethereum, setEthereum] = useState<string>("0");
-  const [btnContent, setBtnContent] = useState<string>("Enter a valid amount");
-  const [amount, setAmount] = useState<string>("")
-  const {account, connect } = useWallet()
+  const [amount, setAmount] = useState<string>("0");
+  const [eth, setETH] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const { account, provider, connectWallet } = useMetaMask();
 
   useEffect(() => {
-    connect()
+    connectWallet();
   }, []);
 
   if (!isOpen) return null;
@@ -32,61 +41,86 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
   };
 
   const inputChange = (value: string) => {
-    setEthereum(value);
+    setAmount(value);
     const num = (Number(value) * 1037).toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
     });
-    setAmount(num);
-    if (value == "" || value == "0") setBtnContent("Enter a valid amount");
-    else setBtnContent("Insufficient token balance");
+    setETH(num);
   };
 
-  const sendETH = async () => {
-    if (!window.ethereum) {
-      alert("MetaMask not installed")
-      return
+  const deposit = async () => {
+    if (!provider || !account || !amount) {
+      alert("Please connect wallet and enter amount");
+      return;
     }
 
-    await window.ethereum.request({
+    await window.ethereum?.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0xaa36a7" }], // Sepolia
-    })
+    });
 
-    const web3 = getWeb3()
-    await window.ethereum.request({ method: "eth_requestAccounts" })
+    try {
+      setLoading(true);
+      // Get signer and contracts
+      const signer = await provider.getSigner();
+      // const chainId = (await provider.getNetwork()).chainId;
+      const chainId = "0xaa36a7";
+      const usdc = new ethers.Contract(
+        DEPLOYMENT.MockUSDC,
+        mockUSDC.abi,
+        signer,
+      );
+      const router = new ethers.Contract(
+        DEPLOYMENT.DepositRouter,
+        depositRouter.abi,
+        signer,
+      );
+      const depositAmount = ethers.parseUnits(amount, 6); // USDC has 6 decimals
+      const nonce = Date.now();
+      const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour
 
-    // const intent: DepositIntent = {
-    const intent = {
-      user: account,
-      vault: "0xa782d9e5e5eb3f4e913223a317f61ecc4bddff43",
-      kol: "0xa782d9e5e5eb3f4e913223a317f61ecc4bddff43",
-      grossAssets: 0.001,
-      deadline: Math.floor(Date.now() / 1000) + 3600,
-      nonce: Date.now(),
+      // Create intent
+      const intent = {
+        user: account,
+        vault: DEPLOYMENT.MockLagoonVault,
+        asset: DEPLOYMENT.MockUSDC,
+        amount: depositAmount,
+        nonce: nonce,
+        deadline: deadline,
+        kolAddress: kolAddress,
+      };
+
+      // Sign with EIP-712
+      const domain = {
+        name: "YieldoDepositRouter",
+        version: "1",
+        chainId: chainId,
+        verifyingContract: DEPLOYMENT.DepositRouter,
+      };
+      const signature = await signer.signTypedData(domain, types, intent);
+      console.log("types  =  ", types);
+      console.log("intent  =  ", intent);
+      console.log("signature  =  ", signature);
+      // Approve USDC
+      const approveTx = await usdc.approve(account, depositAmount);
+      await approveTx.wait();
+
+      console.log("depositTx", intent, signature);
+
+      // Execute deposit
+      const depositTx = await router.verifyAndDeposit(intent, signature);
+      const receipt = await depositTx.wait();
+
+      // const depositTx = await router.verifyAndDeposit(intent, signature);
+      alert(`Deposit successful! Tx: ${receipt.hash}`);
+      setAmount("");
+    } catch (error) {
+      console.error("Error depositing:", error);
+    } finally {
+      setLoading(false);
     }
-
-    // 1️⃣ SIGN WITH METAMASK
-    const signature = await window.ethereum.request({
-      method: "eth_signTypedData_v4",
-      params: [
-        account,
-        JSON.stringify({
-          domain,
-          types,
-          primaryType: "DepositIntent",
-          message: intent,
-        }),
-      ],
-    })
-
-    // 2️⃣ CALL CONTRACT
-    const contract = new web3.eth.Contract(ABI as any, "0xbab898bD8D4799E62a521dbca8B2aCCc00957086")
-
-    await contract.methods
-      .depositWithIntent(intent, signature)
-      .send({ from: account })
-  }
+  };
 
   return (
     <div
@@ -100,13 +134,12 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
         </p>
         <div className="flex justify-between gap-2 w-full mb-[20px]">
           <input
-            type="text"
-            value={ethereum}
+            type="number"
+            value={amount}
             onChange={(e) => {
-              const onlyNumbers = e.target.value.replace(/\D/g, "");
-              inputChange(onlyNumbers);
+              inputChange(e.target.value);
             }}
-            className="text-[25px] px-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] max-w-[250px]"
+            className="text-[25px] px-2 bg-gray-800/50 border border-gray-700 rounded text-white focus:outline-none focus:border-[#45c7f2] max-w-[250px] overflow-hidden"
           />
           <button
             className={`flex items-center gap-2 px-2 py-2 rounded transition-all `}
@@ -119,13 +152,13 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
                 backgroundPosition: "center",
               }}
             ></div>
-            <span className="text-white text-lg">rETH</span>
+            <span className="text-white text-lg">Amount</span>
           </button>
         </div>
 
         <div className="flex justify-between w-full my-2">
           <div className="text-[15px] px-2 py-2 rounded text-blue-400 focus:outline-none focus:border-[#45c7f2] max-w-[150px]">
-            {amount}
+            {eth}
           </div>
           <button
             className={`flex items-center gap-2 px-2 py-2 rounded transition-all `}
@@ -138,12 +171,15 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
         </div>
 
         <button
-          onClick={() => sendETH()}
+          onClick={() => deposit()}
+          disabled={loading || !account}
           className="size-sm h-[43px] rounded-[6px] py-[8px] px-[12px] gap-[8px] hover:bg-[#3bb0d9] transition-colors myBtn flex items-center justify-center
                     cursor-pointer bg-black [box-shadow:0px_0px_17px_0px_rgba(69,199,242,0.15)] transition-all duration-300 
                     hover:border-[rgba(69,199,242,0.4)] hover:[box-shadow:0px_0px_25px_0px_rgba(69,199,242,0.25)] w-full"
         >
-          <span className="text-black text-[16px] font-medium">{btnContent}</span>
+          <span className="text-black text-[16px] font-medium">
+            {loading ? "Processing..." : "Deposit"}
+          </span>
         </button>
       </div>
       {children}

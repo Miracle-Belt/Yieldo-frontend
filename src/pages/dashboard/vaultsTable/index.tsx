@@ -45,19 +45,17 @@ const VaultsTable = () => {
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
-              <th className="text-left text-white/60 text-sm font-normal py-4 px-4">
-                Vault
-              </th>
-              <th className="text-left text-white/60 text-sm font-normal py-4 px-4">
+              <th className="text-left text-sm font-normal py-4 px-4">Vault</th>
+              <th className="text-left text-sm font-normal py-4 px-4">
                 AUM acquired
               </th>
-              <th className="text-left text-white/60 text-sm font-normal py-4 px-4">
+              <th className="text-left text-sm font-normal py-4 px-4">
                 Est. earnings
               </th>
-              <th className="text-left text-white/60 text-sm font-normal py-4 px-4">
+              <th className="text-left text-sm font-normal py-4 px-4">
                 Performance
               </th>
-              <th className="text-right text-white/60 text-sm font-normal py-4 px-4">
+              <th className="text-right text-sm font-normal py-4 px-4">
                 Actions
               </th>
             </tr>
@@ -74,7 +72,7 @@ const VaultsTable = () => {
                 <td className="text-white py-4 px-4">{vault.performance}</td>
                 <td className="text-right py-4 px-4">
                   <div className="flex items-center justify-end gap-3">
-                    <button className="text-white/60 hover:text-white transition-colors">
+                    <button className="text-[#4fE3C1] hover:text-white transition-colors">
                       <svg
                         width="20"
                         height="20"
@@ -100,7 +98,7 @@ const VaultsTable = () => {
                         />
                       </svg>
                     </button>
-                    <button className="text-white/60 hover:text-white transition-colors">
+                    <button className="text-[#4fE3C1] hover:text-white transition-colors">
                       <svg
                         width="20"
                         height="20"

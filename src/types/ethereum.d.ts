@@ -1,4 +1,8 @@
 interface EthereumProvider {
+  removeListener(
+    arg0: string,
+    handleAccountsChanged: (accounts: any) => void,
+  ): unknown;
   isMetaMask?: boolean;
   request: (args: {
     method: string;

@@ -17,16 +17,22 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between gap-10">
           <div className="flex flex-col gap-6 max-w-xl">
             <div>
-              <img src={logo} alt="Logo" className="h-10 w-auto" />
+              <img src={logo} alt="Logo" />
             </div>
             <p className="text-white text-base md:text-lg">
               Earn points for bringing AUM or distributing yield strategies
             </p>
           </div>
           <div className="flex flex-col md:items-end gap-2 text-white">
-            <a href="/" className="hover:text-[#45c7f2] transition-colors">Home</a>
-            <a href="#" className="hover:text-[#45c7f2] transition-colors">Lorem</a>
-            <a href="#" className="hover:text-[#45c7f2] transition-colors">Lorem</a>
+            <a href="/" className="hover:text-[#45c7f2] transition-colors">
+              Home
+            </a>
+            <a href="#" className="hover:text-[#45c7f2] transition-colors">
+              Lorem
+            </a>
+            <a href="#" className="hover:text-[#45c7f2] transition-colors">
+              Lorem
+            </a>
           </div>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-10 border-t border-[#FFFFFF26]">
@@ -34,10 +40,34 @@ const Footer = () => {
             © 2025 YIELDO - All right reserved
           </div>
           <div className="flex items-center gap-6">
-            <a href="#"><img src={prime_twitter} alt="Twitter" className="w-6 h-6 hover:opacity-80 transition-opacity" /></a>
-            <a href="#"><img src={telegram} alt="Telegram" className="w-6 h-6 hover:opacity-80 transition-opacity" /></a>
-            <a href="#"><img src={ix_youtube} alt="Youtube" className="w-6 h-6 hover:opacity-80 transition-opacity" /></a>
-            <a href="#"><img src={medium_line} alt="Medium" className="w-6 h-6 hover:opacity-80 transition-opacity" /></a>
+            <a href="#">
+              <img
+                src={prime_twitter}
+                alt="Twitter"
+                className="w-6 h-6 hover:opacity-80 transition-opacity"
+              />
+            </a>
+            <a href="#">
+              <img
+                src={telegram}
+                alt="Telegram"
+                className="w-6 h-6 hover:opacity-80 transition-opacity"
+              />
+            </a>
+            <a href="#">
+              <img
+                src={ix_youtube}
+                alt="Youtube"
+                className="w-6 h-6 hover:opacity-80 transition-opacity"
+              />
+            </a>
+            <a href="#">
+              <img
+                src={medium_line}
+                alt="Medium"
+                className="w-6 h-6 hover:opacity-80 transition-opacity"
+              />
+            </a>
           </div>
         </div>
       </div>

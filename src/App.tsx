@@ -17,18 +17,16 @@ const App = () => {
   }, []);
   return (
     <BrowserRouter>
-        <Header/>
-          <Routes>
-            <Route path="/" element={<Landing/>} />
-            {/* <Route path="/landing" element={<Landing />} /> */}
-            <Route path="/configurator" element={<Configurator />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        <Footer/>  
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/configurator" element={<Configurator />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
-
-
 
 export default App;
