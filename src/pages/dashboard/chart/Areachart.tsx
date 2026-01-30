@@ -30,7 +30,7 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({
   areaColor = "blue",
   strokeColor = "blue",
 }) => {
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [_, setContainerWidth] = useState(0);
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {

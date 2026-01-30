@@ -8,9 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   ReferenceLine,
-  Dot,
 } from "recharts";
-import type { YAxisProps } from "recharts";
 
 interface ChartDataPoint {
   date: string;
@@ -43,7 +41,6 @@ const yAxisFormatter = (value: number) => {
 const CustomTooltip: React.FC<CustomTooltipProps> = ({
   active,
   payload,
-  label,
   mousePosition,
   data,
 }) => {
