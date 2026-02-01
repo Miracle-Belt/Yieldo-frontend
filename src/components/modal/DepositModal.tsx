@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import ethereumIcon from "../../assets/images/icons/ethereum.png";
-import depositRouter from "../../assets/YieldoDepositRouter.json";
-import mockUSDC from "../../assets/MockUSDC.json";
-import { types } from "../../utils/eip712";
-import { ethers } from "ethers";
+// import depositRouter from "../../assets/YieldoDepositRouter.json";
+// import { types } from "../../utils/eip712";
+// import { ethers } from "ethers";
 import { useMetaMask } from "../../hooks/useMetaMask";
+// import { API_BASE_URL } from "../../config/api";
 
 // This would be loaded from deployment file or env
-const DEPLOYMENT = {
-  DepositRouter: "0x59Db00B9A8426888D5bf6aB8EC5375c4fD5B577E".toLowerCase(),
-  MockLagoonVault: "0xeCD63cC2F2195B491CBCd19e294E812E30396CD2".toLowerCase(),
-  MockUSDC: "0xe282b74b79989FB0Ee27A49F7fF1bfA36b257abE".toLowerCase(),
-};
-// KOL address (for demo, using a placeholder - in production this would be from URL params)
-const kolAddress = "0x8171F3FF83443F250008F9e8305191966473D96d".toLowerCase();
+// const DEPLOYMENT = {
+//   DepositRouter: "0x59Db00B9A8426888D5bf6aB8EC5375c4fD5B577E".toLowerCase(),
+//   MockLagoonVault: "0xeCD63cC2F2195B491CBCd19e294E812E30396CD2".toLowerCase(),
+//   MockUSDC: "0xe282b74b79989FB0Ee27A49F7fF1bfA36b257abE".toLowerCase(),
+// };
+// // KOL address (for demo, using a placeholder - in production this would be from URL params)
+// const kolAddress = "0x8171F3FF83443F250008F9e8305191966473D96d".toLowerCase();
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -55,50 +55,50 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
       return;
     }
 
-    await window.ethereum?.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0xaa36a7" }], // Sepolia
-    });
+    // await window.ethereum?.request({
+    //   method: "wallet_switchEthereumChain",
+    //   params: [{ chainId: "0xaa36a7" }], // Sepolia
+    // });
 
     try {
       setLoading(true);
       // Get signer and contracts
-      const signer = await provider.getSigner();
+      // const signer = await provider.getSigner();
       // const chainId = (await provider.getNetwork()).chainId;
-      const chainId = "0xaa36a7";
+      // const chainId = "0xaa36a7";
       // const usdc = new ethers.Contract(
       //   DEPLOYMENT.MockUSDC,
       //   mockUSDC.abi,
       //   signer,
       // );
-      const router = new ethers.Contract(
-        DEPLOYMENT.DepositRouter,
-        depositRouter.abi,
-        signer,
-      );
-      const depositAmount = ethers.parseUnits(amount, 6); // USDC has 6 decimals
-      const nonce = Date.now();
-      const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+      // const router = new ethers.Contract(
+      //   DEPLOYMENT.DepositRouter,
+      //   depositRouter.abi,
+      //   signer,
+      // );
+      // const depositAmount = ethers.parseUnits(amount, 6); // USDC has 6 decimals
+      // const nonce = Date.now();
+      // const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour
 
       // Create intent
-      const intent = {
-        user: account,
-        vault: DEPLOYMENT.MockLagoonVault,
-        asset: DEPLOYMENT.MockUSDC,
-        amount: depositAmount,
-        nonce: nonce,
-        deadline: deadline,
-        kolAddress: kolAddress,
-      };
+      // const intent = {
+      //   user: account,
+      //   vault: DEPLOYMENT.MockLagoonVault,
+      //   asset: DEPLOYMENT.MockUSDC,
+      //   amount: depositAmount,
+      //   nonce: nonce,
+      //   deadline: deadline,
+      //   kolAddress: kolAddress,
+      // };
 
       // Sign with EIP-712
-      const domain = {
-        name: "YieldoDepositRouter",
-        version: "1",
-        chainId: chainId,
-        verifyingContract: DEPLOYMENT.DepositRouter,
-      };
-      const signature = await signer.signTypedData(domain, types, intent);
+      // const domain = {
+      //   name: "YieldoDepositRouter",
+      //   version: "1",
+      //   chainId: chainId,
+      //   verifyingContract: DEPLOYMENT.DepositRouter,
+      // };
+      // const signature = await signer.signTypedData(domain, types, intent);
 
       // // Approve USDC
       // const approveTx = await usdc.approve(DEPLOYMENT.DepositRouter, depositAmount);
@@ -115,11 +115,12 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
       // console.log("mintTx before : ", mintTx);
 
       // Execute deposit
-      const depositTx = await router.verifyAndDeposit(intent, signature);
-      const receipt = await depositTx.wait();
-
       // const depositTx = await router.verifyAndDeposit(intent, signature);
-      alert(`Deposit successful! Tx: ${receipt.hash}`);
+      // const receipt = await depositTx.wait();
+
+      // // const depositTx = await router.verifyAndDeposit(intent, signature);
+      // alert(`Deposit successful! Tx: ${receipt.hash}`);
+
       setAmount("");
     } catch (error) {
       console.error("Error depositing:", error);

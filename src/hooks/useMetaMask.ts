@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import moduleName from "module";
+import { BrowserProvider, ethers } from "ethers";
+import { authSiweStart, authSiweVerify } from "../services/userService";
 
 export const useMetaMask = () => {
   const [account, setAccount] = useState<string | null>(null);
@@ -57,24 +57,23 @@ export const useMetaMask = () => {
     // }
     if (window.ethereum) {
       try {
-        const web3Provider = new ethers.BrowserProvider(window.ethereum);
-        const accounts = await web3Provider.send("eth_requestAccounts", []);
+        const provider = new BrowserProvider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
         setAccount(accounts[0]);
-        setProvider(web3Provider);
+        setProvider(provider);
 
         localStorage.setItem("account", accounts[0]);
-        console.log(accounts[0]);
 
-        await fetch("http://172.20.1.19:3001/v1/auth/siwe/start", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chainId: "0xaa36a7",
-            address: accounts[0],
-          }),
-        });
+        const chainId = "0xaa36a7";
+        const address = accounts[0];
+        const message = JSON.stringify(
+          await authSiweStart({ chainId, address }),
+        );
+        const signer = await provider.getSigner();
+        // //  SIGN
+        const signature = await signer.signMessage(message); //  verify
+        const verifyRes = await authSiweVerify({ message, signature });
+        console.log("verifyRes", verifyRes);
       } catch (err) {
         console.error("Error connecting to wallet:", err);
       }
