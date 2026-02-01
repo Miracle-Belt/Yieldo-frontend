@@ -9,12 +9,12 @@ import { useMetaMask } from "../../hooks/useMetaMask";
 
 // This would be loaded from deployment file or env
 const DEPLOYMENT = {
-  DepositRouter: "0x6aEF06B6F8bAE2e2877D1f6f2417B7Ac93f5C20f".toLowerCase(),
-  MockLagoonVault: "0xE711750dF0dfb5aDB0142bD64EE0Ef2eF1453b88".toLowerCase(),
-  MockUSDC: "0x2e96B06907378F9A503f7Eeb6CbF6d06cA6Bf1C8".toLowerCase(),
+  DepositRouter: "0x59Db00B9A8426888D5bf6aB8EC5375c4fD5B577E".toLowerCase(),
+  MockLagoonVault: "0xeCD63cC2F2195B491CBCd19e294E812E30396CD2".toLowerCase(),
+  MockUSDC: "0xe282b74b79989FB0Ee27A49F7fF1bfA36b257abE".toLowerCase(),
 };
 // KOL address (for demo, using a placeholder - in production this would be from URL params)
-const kolAddress = "0x4A8f63BACa4F255c30DcBb6565d017EDA2481D1c".toLowerCase();
+const kolAddress = "0x8171F3FF83443F250008F9e8305191966473D96d".toLowerCase();
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -66,11 +66,11 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
       const signer = await provider.getSigner();
       // const chainId = (await provider.getNetwork()).chainId;
       const chainId = "0xaa36a7";
-      const usdc = new ethers.Contract(
-        DEPLOYMENT.MockUSDC,
-        mockUSDC.abi,
-        signer,
-      );
+      // const usdc = new ethers.Contract(
+      //   DEPLOYMENT.MockUSDC,
+      //   mockUSDC.abi,
+      //   signer,
+      // );
       const router = new ethers.Contract(
         DEPLOYMENT.DepositRouter,
         depositRouter.abi,
@@ -99,14 +99,20 @@ const DepositModal = ({ isOpen, onClose, children }: DepositModalProps) => {
         verifyingContract: DEPLOYMENT.DepositRouter,
       };
       const signature = await signer.signTypedData(domain, types, intent);
-      console.log("types  =  ", types);
-      console.log("intent  =  ", intent);
-      console.log("signature  =  ", signature);
-      // Approve USDC
-      const approveTx = await usdc.approve(account, depositAmount);
-      await approveTx.wait();
 
-      console.log("depositTx", intent, signature);
+      // // Approve USDC
+      // const approveTx = await usdc.approve(DEPLOYMENT.DepositRouter, depositAmount);
+      // await approveTx.wait();
+
+      // const mintTx = await usdc.mint(account, depositAmount);
+      // await mintTx.wait();
+
+      // const depositFeeEnable = await router.setFeesEnabled(true);
+      // await depositFeeEnable.wait();
+
+      // console.log("depositTx before : ", intent, signature);
+      // console.log("approveTx before : ", approveTx);
+      // console.log("mintTx before : ", mintTx);
 
       // Execute deposit
       const depositTx = await router.verifyAndDeposit(intent, signature);

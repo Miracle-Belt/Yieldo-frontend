@@ -17,8 +17,6 @@ const ConnectWallet: React.FC = () => {
     if (storedAccount) {
       connectWallet(); // Automatically reconnect if account is stored
     }
-
-    // if (localStorage.get("account"))
   }, []);
 
   return (

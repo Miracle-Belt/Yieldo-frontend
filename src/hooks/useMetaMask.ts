@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import moduleName from "module";
 
 export const useMetaMask = () => {
   const [account, setAccount] = useState<string | null>(null);
@@ -60,7 +61,20 @@ export const useMetaMask = () => {
         const accounts = await web3Provider.send("eth_requestAccounts", []);
         setAccount(accounts[0]);
         setProvider(web3Provider);
+
         localStorage.setItem("account", accounts[0]);
+        console.log(accounts[0]);
+
+        await fetch("http://172.20.1.19:3001/v1/auth/siwe/start", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chainId: "0xaa36a7",
+            address: accounts[0],
+          }),
+        });
       } catch (err) {
         console.error("Error connecting to wallet:", err);
       }
